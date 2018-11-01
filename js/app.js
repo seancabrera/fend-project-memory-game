@@ -1,6 +1,3 @@
-/*
- * Create a list that holds all of your cards
- */
 let cards = [
     'fa-diamond',
     'fa-diamond',
@@ -19,8 +16,7 @@ let cards = [
     'fa-bomb',
     'fa-bomb'
 ];
-
-let modal;
+let congratsModal;
 let moveCounter = 0;
 let openCards = [];
 let timerStarted;
@@ -35,11 +31,9 @@ function initApp() {
 }
 
 /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+* Initialize the game by initializing the card deck and
+* resetting the score panel and timer
+*/
 function initGame() {
     initCardDeck();
     addClickListenersToCards();
@@ -49,21 +43,20 @@ function initGame() {
 }
 
 /*
-* Init the congrats modal, which is the modal displayed
+* Initialize the congrats modal, which is the modal displayed
 * when the user finished the game
 */
 function initCongratsModal() {
-    modal = document.getElementById('congrats-modal');
-    let modalCloseButton = document.querySelector('.close');
+    congratsModal = document.getElementById('congrats-modal');
+    const modalCloseButton = document.querySelector('.close');
 
     // If the user clicks outside of the modal, close it
     // This code snippet was adapted from:
     // https://www.w3schools.com/howto/howto_css_modals.asp
     // on 10/30/2018
-    // and modified to include the modalCloseButton
     window.onclick = function(event) {
-        if (event.target === modal || event.target === modalCloseButton) {
-            modal.style.display = "none";
+        if (event.target === congratsModal || event.target === modalCloseButton) {
+            closeModal();
         }
     }
 
@@ -80,18 +73,25 @@ function initCongratsModal() {
 }
 
 function closeModal() {
-    modal.style.display = "none";
+    congratsModal.style.display = "none";
 }
 
 function addRestartListener() {
     document.querySelector('.restart').addEventListener('click', initGame);
 }
 
+/*
+ * Display the cards on the page
+ *   - shuffle the list of cards using the provided "shuffle" method below
+ *   - loop through each card and create its HTML
+ *   - add each card's HTML to the page
+ */
 function initCardDeck() {
     const deck = document.querySelector('.deck');
     deck.innerHTML = '';
 
-    // cards = shuffle(cards);
+    cards = shuffle(cards);
+
     cards.forEach(card => {
         const cardHTML =`
             <li class="card" data-card="${card}">
@@ -122,22 +122,14 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
 function addClickListenersToCards() {
     const allCards = document.querySelectorAll('.card');
-
     allCards.forEach(card => card.addEventListener('click', handleCardClick));
 }
 
+/*
+* Click listener for all card clicks
+*/
 function handleCardClick() {
     if(!timerStarted) {
         startTimer();
@@ -174,10 +166,12 @@ function increaseTimer() {
 }
 
 function isCardOpen(card) {
+    // a card is "open" if it has 'open' and 'match classes'
     return card.classList.contains('open') || card.classList.contains('match');
 }
 
 function openCard(card) {
+    // a card is "open" if it has 'open' and 'match classes'
     card.classList.add('open', 'show');
     openCards.push(card);
 }
@@ -190,6 +184,7 @@ function lockOpenCards() {
     openCards.forEach(function(openCard) {
         // perform bounce animation for 1500ms
         openCard.classList.add('animated', 'bounce');
+        // clear the animation classes so that they can happen again
         setTimeout(() => openCard.classList.remove('animated', 'bounce'), 1500);
 
         // cards matched
@@ -203,7 +198,8 @@ function closeOpenCards() {
         // perform shake animation for 1500 ms then close the cards
         openCard.classList.add('animated', 'shake');
         setTimeout(() => {
-            openCard.classList.remove('animated', 'shake')
+            // clear the animation classes so that they can happen again
+            openCard.classList.remove('animated', 'shake');
             openCard.classList.remove('open', 'show');
         }, 1500);
 
@@ -213,8 +209,8 @@ function closeOpenCards() {
 
 function incrementMoveCounter() {
     moveCounter++;
-    document.querySelectorAll('.moves')
-        .forEach(moveCounterElem => moveCounterElem.innerText = moveCounter);
+    const moveCounterElems = document.querySelectorAll('.moves');
+    moveCounterElems.forEach(moveCounterElem => moveCounterElem.innerText = moveCounter);
 }
 
 function updateStarRating() {
@@ -237,6 +233,9 @@ function allCardsMatched() {
     return document.querySelectorAll('.card.match').length === 16;
 }
 
+/*
+* End the game by stopping the timer and showing the congrats modal
+*/
 function endGame() {
     stopTimer();
     displayCongratsModal();
@@ -248,12 +247,13 @@ function stopTimer() {
 }
 
 function displayCongratsModal() {
-    modal.style.display = 'block';
+    congratsModal.style.display = 'block';
 }
 
 function resetMoveCounter() {
     moveCounter = 0;
-    document.querySelector('.moves').innerText = moveCounter;
+    const moveCounterElems = document.querySelectorAll('.moves');
+    moveCounterElems.forEach(moveCounterElem => moveCounterElem.innerText = moveCounter);
 }
 
 function resetTimer() {
@@ -265,8 +265,8 @@ function resetTimer() {
 
 function renderTimerValue(timer) {
     const timerDisplayString = getTimerDisplayString(timer);
-    document.querySelectorAll('.timer')
-        .forEach(timerElem => timerElem.innerText = timerDisplayString);
+    const timerElems = document.querySelectorAll('.timer');
+    timerElems.forEach(timerElem => timerElem.innerText = timerDisplayString);
 }
 
 function resetStars() {
@@ -277,6 +277,9 @@ function resetStars() {
     });
 }
 
+/*
+* Display the timer as mm:ss
+*/
 function getTimerDisplayString(timer) {
     let minutes = Math.floor(timer / 60);
     let seconds = timer % 60;
