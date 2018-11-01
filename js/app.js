@@ -151,7 +151,7 @@ function handleCardClick() {
             if(isMatch()) {
                 lockOpenCards();
             } else {
-                setTimeout(closeOpenCards, 1500);
+                closeOpenCards();
             }
 
             incrementMoveCounter();
@@ -188,6 +188,11 @@ function isMatch() {
 
 function lockOpenCards() {
     openCards.forEach(function(openCard) {
+        // perform bounce animation for 1500ms
+        openCard.classList.add('animated', 'bounce');
+        setTimeout(() => openCard.classList.remove('animated', 'bounce'), 1500);
+
+        // cards matched
         openCard.classList.add('match');
     });
     openCards = [];
@@ -195,7 +200,13 @@ function lockOpenCards() {
 
 function closeOpenCards() {
     openCards.forEach(function(openCard) {
-        openCard.classList.remove('open', 'show');
+        // perform shake animation for 1500 ms then close the cards
+        openCard.classList.add('animated', 'shake');
+        setTimeout(() => {
+            openCard.classList.remove('animated', 'shake')
+            openCard.classList.remove('open', 'show');
+        }, 1500);
+
     });
     openCards = [];
 }
