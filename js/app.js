@@ -47,12 +47,16 @@ function initGame() {
     resetTimer();
 }
 
+/*
+* Init the congrats modal, which is the modal displayed
+* when the user finished the game
+*/
 function initCongratsModal() {
     modal = document.getElementById('congrats-modal');
     let modalCloseButton = document.querySelector('.close');
 
     // If the user clicks outside of the modal, close it
-    // This code snippet was taken from:
+    // This code snippet was adapted from:
     // https://www.w3schools.com/howto/howto_css_modals.asp
     // on 10/30/2018
     // and modified to include the modalCloseButton
@@ -61,6 +65,21 @@ function initCongratsModal() {
             modal.style.display = "none";
         }
     }
+
+    document.querySelector('.modal-yes-button')
+        .addEventListener('click', () => {
+            closeModal();
+            initGame();
+        });
+
+    document.querySelector('.modal-no-button')
+        .addEventListener('click', () => {
+            closeModal();
+        });
+}
+
+function closeModal() {
+    modal.style.display = "none";
 }
 
 function addRestartListener() {
