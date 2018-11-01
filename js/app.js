@@ -45,6 +45,7 @@ function initGame() {
     addClickListenersToCards();
     resetMoveCounter();
     resetTimer();
+    resetStars();
 }
 
 /*
@@ -154,6 +155,7 @@ function handleCardClick() {
             }
 
             incrementMoveCounter();
+            updateStarRating();
 
             if(allCardsMatched()) {
                 endGame();
@@ -204,6 +206,22 @@ function incrementMoveCounter() {
         .forEach(moveCounterElem => moveCounterElem.innerText = moveCounter);
 }
 
+function updateStarRating() {
+    if(moveCounter === 12) {
+        unfillStarIcon('star-3');
+    } else if(moveCounter === 20) {
+        unfillStarIcon('star-2');
+    }
+}
+
+function unfillStarIcon(starClass) {
+    const starIcons = document.querySelectorAll('.' + starClass);
+    starIcons.forEach(starIcon => {
+        starIcon.classList.remove('fa-star');
+        starIcon.classList.add('fa-star-o');
+    });
+}
+
 function allCardsMatched() {
     return document.querySelectorAll('.card.match').length === 16;
 }
@@ -238,6 +256,14 @@ function renderTimerValue(timer) {
     const timerDisplayString = getTimerDisplayString(timer);
     document.querySelectorAll('.timer')
         .forEach(timerElem => timerElem.innerText = timerDisplayString);
+}
+
+function resetStars() {
+    const starIcons = document.querySelectorAll('.fa-star-o');
+    starIcons.forEach(starIcon => {
+        starIcon.classList.remove('fa-star-o');
+        starIcon.classList.add('fa-star');
+    });
 }
 
 function getTimerDisplayString(timer) {
