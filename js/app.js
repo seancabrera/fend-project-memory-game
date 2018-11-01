@@ -91,7 +91,7 @@ function initCardDeck() {
     deck.innerHTML = '';
 
     // cards = shuffle(cards);
-    cards.forEach(function(card) {
+    cards.forEach(card => {
         const cardHTML =`
             <li class="card" data-card="${card}">
                 <i class="fa ${card}"></i>
@@ -134,9 +134,7 @@ function shuffle(array) {
 function addClickListenersToCards() {
     const allCards = document.querySelectorAll('.card');
 
-    allCards.forEach(function(card) {
-        card.addEventListener('click', handleCardClick)
-    });
+    allCards.forEach(card => card.addEventListener('click', handleCardClick));
 }
 
 function handleCardClick() {
@@ -202,9 +200,8 @@ function closeOpenCards() {
 
 function incrementMoveCounter() {
     moveCounter++;
-    document.querySelectorAll('.moves').forEach(function(moveCounterElem) {
-        moveCounterElem.innerText = moveCounter;
-    });
+    document.querySelectorAll('.moves')
+        .forEach(moveCounterElem => moveCounterElem.innerText = moveCounter);
 }
 
 function allCardsMatched() {
@@ -239,9 +236,8 @@ function resetTimer() {
 
 function renderTimerValue(timer) {
     const timerDisplayString = getTimerDisplayString(timer);
-    document.querySelectorAll('.timer').forEach(function(timerElem) {
-        timerElem.innerText = timerDisplayString;
-    });
+    document.querySelectorAll('.timer')
+        .forEach(timerElem => timerElem.innerText = timerDisplayString);
 }
 
 function getTimerDisplayString(timer) {
