@@ -83,7 +83,7 @@
 }
 
 .modal-yes-button {
-    background-color: #008CBA;;
+    background-color: #008cba;
     color: white;
 }
 
@@ -99,7 +99,7 @@
 button.modal-yes-button:hover {
     background-color: white;
     color: #008CBA;
-    box-shadow: inset 0 0 0 3px #008CBA;
+    box-shadow: inset 0 0 0 3px #008cba;
 }
 
 button.modal-no-button:hover {
