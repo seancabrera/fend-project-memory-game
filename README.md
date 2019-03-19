@@ -1,10 +1,5 @@
 # Memory Game Project
 
-## Table of Contents
-
-* [Overview](#overview)
-* [Instructions](#instructions)
-
 ## Overview
 This project was completed as part of the Udacity Front-End Web Developer Nanodegree program.
 
